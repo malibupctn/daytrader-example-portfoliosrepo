@@ -1,0 +1,27 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Derby
+derby.log
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+target/
+
+# Classes
+*.class 
+   
+# Archives
+*.jar 
+*.war 
+*.ear
+*.zip

@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<parent>
+        <groupId>org.apache.geronimo.daytrader.javaee6.portfolios</groupId>
+        <artifactId>daytrader-portfoliosapp</artifactId>
+        <version>4.0.0</version>
+    </parent>
+	
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>daytrader-portfolios</artifactId>
+	<packaging>war</packaging>
+	
+	<dependencies>
+		<!-- Module Dependencies -->
+	    <dependency>
+            <groupId>org.apache.geronimo.daytrader.javaee6.portfolios</groupId>
+            <artifactId>daytrader-utilities</artifactId>            
+            <scope>compile</scope>         
+            <version>4.0.0</version>
+        </dependency>        
+		
+        <dependency>
+            <groupId>org.apache.geronimo.daytrader.javaee6.portfolios</groupId>
+            <artifactId>daytrader-entities</artifactId>            
+            <scope>compile</scope>    
+			<version>4.0.0</version>
+        </dependency>
+		
+		<!-- Database Dependencies -->
+	    <dependency>
+		    <groupId>org.apache.derby</groupId>
+		    <artifactId>derby</artifactId>
+		    <version>10.14.1.0</version>
+	    </dependency>
+	    
+	    <dependency>
+			<groupId>oracle.jdbc</groupId>
+			<artifactId>ojdbc7</artifactId>
+			<version>12.1.0.2.0</version>
+		</dependency>
+		
+		<!-- Swagger Dependencies -->
+	    <dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+		
+	    <dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+		
+<!--
+		- Upgraded to Spring Boot
+		- These dependencies must precede Third Party
+-->	
+	    <dependency>
+		    <groupId>org.apache.tomcat</groupId>
+		    <artifactId>tomcat-dbcp</artifactId>
+		    <version>8.0.9</version>
+	    </dependency>
+		
+	    <dependency>
+		    <groupId>org.apache.tomcat.embed</groupId>
+		    <artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+	    </dependency>
+	    		
+	    <dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+	    </dependency>
+		
+		<dependency>
+		    <groupId>org.eclipse.jdt.core.compiler</groupId>
+		    <artifactId>ecj</artifactId>
+		    <version>4.6.1</version>		     
+		</dependency>
+ 		
+ 		<!--  
+ 		spring-boot-starter-web: includes all the dependencies required to create a 
+ 		web app. This will avoid lining up different spring common project versions.
+ 		-->
+	    <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-web</artifactId>
+	    </dependency>
+		
+		<!-- 
+		spring-boot-starter-tomcat: enable an embedded Apache Tomcat 8 instance, by default. 
+		-->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+	    </dependency>
+		
+		<!-- 
+		spring-boot-starter-actuator: Enables spring boot actuator features in spring boot.
+		-->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+		<!-- 
+		spring-boot-starter-security: Enables security to spring boot actuator endpoints.     
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		-->
+				
+		<!-- Third Party Dependencies -->
+
+		<dependency>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+            <scope>compile</scope>
+        </dependency>
+        
+		<dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <scope>compile</scope>
+        </dependency>       
+
+		<!-- REST Client Dependencies -->
+		
+       <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+<!--         
+		<dependency>
+    		<groupId>com.fasterxml.jackson.datatype</groupId>
+    		<artifactId>jackson-datatype-jsr310</artifactId>
+    		<version>2.8.5</version>
+		</dependency>
+-->			
+		<dependency>
+   			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+
+		<dependency>
+   			<groupId>com.fasterxml.jackson.core</groupId>
+   			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
+		<dependency>
+    	    <groupId>org.glassfish.jersey.core</groupId>
+        	<artifactId>jersey-client</artifactId>
+		</dependency>  
+
+    </dependencies>
+
+    <build>
+    
+    	<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**/*.yml</exclude>
+					<exclude>**/*.sh</exclude>
+					<exclude>**/*.jks</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		
+		<plugins>
+		
+		  <plugin>
+  			  <groupId>org.apache.maven.plugins</groupId>
+    			<artifactId>maven-resources-plugin</artifactId>
+    			<version>2.4.2</version>
+    			<executions>
+      				<execution>
+        				<id>default-copy-resources</id>
+        				<phase>process-resources</phase>
+				        <goals>
+          					<goal>copy-resources</goal>
+				        </goals>
+        				<configuration>
+          					<overwrite>true</overwrite>
+          					<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF/classes/</outputDirectory>
+          					<resources>
+            					<resource>
+              						<directory>${daytraderKeystoreFolder}</directory>
+              						<includes>
+              							<include>keystore.jks</include>
+              						</includes>
+            					</resource>
+          					</resources>
+        				</configuration>
+      				</execution>
+    			</executions>
+  			</plugin>
+			
+			<!-- Unit Testing Plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/*IntegrationTests.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+        </plugins> 
+	</build>
+  	<profiles>
+  
+  		<profile>
+  			<id>local</id>
+  			<activation>
+  				<activeByDefault>true</activeByDefault>
+			</activation>
+  			<properties>
+  				<daytraderKeystoreFolder>${basedir}/src/main/resources/external/ssl</daytraderKeystoreFolder>
+  			</properties>
+  			<build>
+	  			<plugins>
+					<!--  Repackage the WAR so it can be executed from the command line using java -jar -->
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>				
+						<configuration>
+							<fork>true</fork>
+							<mainClass>org.apache.geronimo.daytrader.javaee6.portfolios.PortfoliosApplication</mainClass>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+  	
+ 		<!--  Added profile to support integration testing on springboot -->
+  		<profile>
+  			<id>ci</id>
+  			<properties>
+  				<daytraderKeystoreFolder>${basedir}/src/main/resources/external/ssl</daytraderKeystoreFolder>
+				<daytraderLogLevel>TRACE</daytraderLogLevel>
+				<daytraderLogFilename>/var/log/daytrader/${daytraderAppArtifactId}-${daytraderAppVersion}.log</daytraderLogFilename>
+  				<accountsServiceRoute>https://localhost:1443</accountsServiceRoute>
+				<gatewayServiceRoute>https://localhost:2443</gatewayServiceRoute>
+				<portfoliosServiceRoute>https://localhost:3443</portfoliosServiceRoute>
+				<quotesServiceRoute>https://localhost:4443</quotesServiceRoute>
+				<daytraderTruststoreLocation>${daytraderKeystoreFolder}/truststore.jks</daytraderTruststoreLocation>
+				<daytraderTruststorePassword>password</daytraderTruststorePassword>		
+  			</properties>
+  			<build>
+  				<plugins>					
+					<!--  Repackage the WAR so it can be executed from the command line using java -jar -->
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>				
+						<configuration>
+							<fork>true</fork>
+							<mainClass>org.apache.geronimo.daytrader.javaee6.portfolios.PortfoliosApplication</mainClass>
+						</configuration>
+					</plugin>
+
+					<!-- Integration Testing Plugin -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>integration-tests</id>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+								<configuration>
+									<includes>
+										<include>**/*IntegrationTests.java</include>
+									</includes>
+									<environmentVariables>					
+          								<DAYTRADER_ACCOUNTS_SERVICE>${accountsServiceRoute}</DAYTRADER_ACCOUNTS_SERVICE>
+          								<DAYTRADER_GATEWAY_SERVICE>${gatewayServiceRoute}</DAYTRADER_GATEWAY_SERVICE>
+          								<DAYTRADER_PORTFOLIOS_SERVICE>${portfoliosServiceRoute}</DAYTRADER_PORTFOLIOS_SERVICE>
+	          							<DAYTRADER_QUOTES_SERVICE>${quotesServiceRoute}</DAYTRADER_QUOTES_SERVICE>
+										<DAYTRADER_LOG_LEVEL>${daytraderLogLevel}</DAYTRADER_LOG_LEVEL>
+										<DAYTRADER_LOG_FILENAME>${daytraderLogFilename}</DAYTRADER_LOG_FILENAME>
+    	    						</environmentVariables>
+    	    						
+    	    						<systemPropertyVariables>
+										<javax.net.ssl.trustStore>${daytraderTruststoreLocation}</javax.net.ssl.trustStore>
+										<javax.net.ssl.trustStorePassword>${daytraderTruststorePassword}</javax.net.ssl.trustStorePassword>
+									</systemPropertyVariables>
+									
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>			
+					<!--  
+						Additional lifecycle bindings for the integration-test
+						- pre-integration-test: Start the application 
+						- post-integration-test: Stop the application
+					-->				
+	  				<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<!-- pre-integration-test: start the application -->
+   							<execution>
+	   							<id>statup-application</id>
+    	   						<phase>pre-integration-test</phase>
+       							<configuration>
+           							<target>
+               							<exec executable="cmd.exe" 	spawn="true">
+		            		           		<arg value="/c"/>
+     	  			    	        		<arg value="${project.basedir}/env/external/bin/start_server.bat"/>
+        	       						</exec>
+           							</target>
+	       						</configuration>
+    	   						<goals>
+        	   						<goal>run</goal>
+       							</goals>
+							</execution>
+
+							<!-- pre-integration-test: wait for the application to start -->    	   							
+							<execution>
+            	       			<id>wait-for-application-to-start</id>
+	                	   		<phase>pre-integration-test</phase>
+    	               			<configuration>
+        	               			<target>
+            	               			<sleep seconds="20" />
+          	    	         		</target>
+            	    	   		</configuration>
+                	   			<goals>
+                    	   			<goal>run</goal>
+           	        			</goals>
+          			         </execution>
+					
+							<!-- post-integration-test: Stop the application -->
+			            	<execution>
+   				      		   	<id>shutdown-application</id>
+        	   		    		<phase>post-integration-test</phase>
+           						<configuration>
+               						<target>
+                   						<exec executable="cmd.exe" 	spawn="true">
+		                	    	   		<arg value="/c"/>
+           			        	   			<arg value="${project.basedir}/env/external/bin/stop_server.bat"/>
+                   						</exec>
+		               				</target>
+    		       				</configuration>
+        		   				<goals>
+            		   				<goal>run</goal>
+           						</goals>
+           					</execution>
+	   					</executions>
+   					</plugin>
+   				</plugins>
+  			</build>
+	  	</profile>
+
+	</profiles>
+
+</project>
