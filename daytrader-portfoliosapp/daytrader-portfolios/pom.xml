@@ -271,6 +271,7 @@
   				<daytraderKeystoreFolder>${basedir}/src/main/resources/external/ssl</daytraderKeystoreFolder>
 				<daytraderLogLevel>TRACE</daytraderLogLevel>
 				<daytraderLogFilename>/var/log/daytrader/${daytraderAppArtifactId}-${daytraderAppVersion}.log</daytraderLogFilename>
+				<daytraderLogAppender>ConsoleAppender</daytraderLogAppender>
   				<accountsServiceRoute>https://localhost:1443</accountsServiceRoute>
 				<gatewayServiceRoute>https://localhost:2443</gatewayServiceRoute>
 				<portfoliosServiceRoute>https://localhost:3443</portfoliosServiceRoute>
@@ -312,6 +313,7 @@
 	          							<DAYTRADER_QUOTES_SERVICE>${quotesServiceRoute}</DAYTRADER_QUOTES_SERVICE>
 										<DAYTRADER_LOG_LEVEL>${daytraderLogLevel}</DAYTRADER_LOG_LEVEL>
 										<DAYTRADER_LOG_FILENAME>${daytraderLogFilename}</DAYTRADER_LOG_FILENAME>
+										<DAYTRADER_LOG_APPENDER>${daytraderLogAppender}</DAYTRADER_LOG_APPENDER>
     	    						</environmentVariables>
     	    						
     	    						<systemPropertyVariables>
@@ -338,9 +340,11 @@
     	   						<phase>pre-integration-test</phase>
        							<configuration>
            							<target>
-               							<exec executable="cmd.exe" 	spawn="true">
-		            		           		<arg value="/c"/>
-     	  			    	        		<arg value="${project.basedir}/env/external/bin/start_server.bat"/>
+           								<condition property="buildScript" value="start_server.bat" else="start_server.sh">
+                                    		<os family="windows"/>
+                                		</condition>
+	                           			<echo>Starting ${project.basedir}/env/external/bin/${buildScript}</echo>
+               							<exec executable="${project.basedir}/env/external/bin/${buildScript}" spawn="true">
         	       						</exec>
            							</target>
 	       						</configuration>
@@ -369,10 +373,12 @@
         	   		    		<phase>post-integration-test</phase>
            						<configuration>
                						<target>
-                   						<exec executable="cmd.exe" 	spawn="true">
-		                	    	   		<arg value="/c"/>
-           			        	   			<arg value="${project.basedir}/env/external/bin/stop_server.bat"/>
-                   						</exec>
+           								<condition property="buildScript" value="stop_server.bat" else="stop_server.sh">
+                                    		<os family="windows"/>
+                                		</condition>
+	                           			<echo>Starting ${project.basedir}/env/external/bin/${buildScript}</echo>
+               							<exec executable="${project.basedir}/env/external/bin/${buildScript}" spawn="true">
+        	       						</exec>
 		               				</target>
     		       				</configuration>
         		   				<goals>

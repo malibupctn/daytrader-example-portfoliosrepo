@@ -30,9 +30,7 @@ import java.util.Random;
 public class TradeConfig {
 
     //		- Each microservice has their own private database (datasource)
-    public static String ACCOUNTS_DATASOURCE = "java:comp/env/jdbc/AccountsDataSource";
     public static String PORTFOLIOS_DATASOURCE = "java:comp/env/jdbc/PortfoliosDataSource";
-    public static String QUOTES_DATASOURCE = "java:comp/env/jdbc/QuotesDataSource";
 
     public static String[] orderProcessingModeNames =
         { "Synchronous", "Asynchronous_2-Phase" };

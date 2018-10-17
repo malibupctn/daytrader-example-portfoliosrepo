@@ -24,7 +24,7 @@ set DAYTRADER_WAR_ARTIFACTID=daytrader-portfolios
 @ECHO OFF
 echo "set database variables"
 set DAYTRADER_DATABASE_DRIVER=org.apache.derby.jdbc.EmbeddedDriver
-set DAYTRADER_DATABASE_URL=jdbc:derby:/var/dat/daytrader/PORTFOLIOS_D;create=true
+set DAYTRADER_DATABASE_URL=jdbc:derby:tradesdb;create=true
 set DAYTRADER_DATABASE_USERNAME=xxx
 set DAYTRADER_DATABASE_PASSWORD=xxx
 
@@ -44,6 +44,7 @@ set DAYTRADER_QUOTES_SERVICE=https://localhost:4443
 echo set logging variables
 set DAYTRADER_LOG_FILENAME=/var/log/daytrader/%DAYTRADER_APP_ARTIFACTID%-%DAYTRADER_APP_VERSION%.log
 set DAYTRADER_LOG_LEVEL=TRACE
+set DAYTRADER_LOG_APPENDER=ConsoleAppender
 
 @echo off
 echo "end of setenv.bat"
