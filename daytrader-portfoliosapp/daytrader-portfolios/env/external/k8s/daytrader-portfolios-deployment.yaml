@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: daytrader-portfolios
+  name: daytrader-portfolios
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: daytrader-portfolios
+  template:
+    metadata:
+      labels:
+        app: daytrader-portfolios
+    spec:
+      containers:
+      - image: dhvines/daytrader-portfolios:4.0.15
+        imagePullPolicy: IfNotPresent
+        name: daytrader-portfolios
+        ports:
+        - containerPort: 3443
+          protocol: TCP
+        env:
+        - name: ACCOUNTS_SERVICE_ROUTE
+          value: https://daytrader-accounts
+        - name: GATEWAY_SERVICE_ROUTE
+          value: https://daytrader-gateway
+        - name: PORTFOLIOS_SERVICE_ROUTE
+          value: https://daytrader-portfolios
+        - name: QUOTES_SERVICE_ROUTE
+          value: https://daytrader-quotes
+        - name: GET_HOSTS_FROM
+          value: dns

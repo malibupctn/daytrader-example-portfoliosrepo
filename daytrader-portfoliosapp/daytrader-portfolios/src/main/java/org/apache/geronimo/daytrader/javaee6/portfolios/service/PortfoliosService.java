@@ -878,8 +878,8 @@ public class PortfoliosService
 
         HoldingDataBean holdingData = null;
 
-        Log.debug("PortfoliosService:completeOrder()--> Completing Order " + orderData.getOrderID() + "\n\t Order info: "
-                + orderData + "\n\t Account info: " + accountID + "\n\t Quote info: " + quoteID);
+//        Log.debug("PortfoliosService:completeOrder()--> Completing Order " + orderData.getOrderID() + "\n\t Order info: "
+//                + orderData + "\n\t Account info: " + accountID + "\n\t Quote info: " + quoteID);
 
         // if (order.isBuy())
         if (orderType.compareToIgnoreCase("buy") == 0) {
@@ -909,9 +909,9 @@ public class PortfoliosService
         orderData.setOrderStatus("closed");
         updateOrderStatus(conn, orderData.getOrderID(), orderData.getOrderStatus() );
 
-        Log.debug("PortfoliosService:completeOrder()--> Completed Order " + orderData.getOrderID() + "\n\t Order info: "
-                + orderData + "\n\t Account info: " + accountID + "\n\t Quote info: " + quoteID + "\n\t Holding info: "
-                + holdingData);
+//        Log.debug("PortfoliosService:completeOrder()--> Completed Order " + orderData.getOrderID() + "\n\t Order info: "
+//                + orderData + "\n\t Account info: " + accountID + "\n\t Quote info: " + quoteID + "\n\t Holding info: "
+//                + holdingData);
 
         rs.close();
         stmt.close();

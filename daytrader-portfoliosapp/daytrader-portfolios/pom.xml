@@ -218,6 +218,7 @@
               						<directory>${daytraderKeystoreFolder}</directory>
               						<includes>
               							<include>keystore.jks</include>
+             							<include>truststore.jks</include>
               						</includes>
             					</resource>
           					</resources>
@@ -390,6 +391,51 @@
    				</plugins>
   			</build>
 	  	</profile>
+	  	
+  		<profile>
+  			<id>cd</id>
+  			<properties>
+  				<daytraderKeystoreFolder>${basedir}/src/main/resources/external/ssl</daytraderKeystoreFolder>
+				<docker.image.prefix>${user.name}</docker.image.prefix>
+				<dockerfile-maven-version>1.4.0</dockerfile-maven-version>	
+  			</properties>
+  			<build>
+				<plugins>
+					<!--  Repackage the WAR so it can be executed from the command line using java -jar -->
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>				
+						<configuration>
+							<fork>true</fork>
+							<mainClass>org.apache.geronimo.daytrader.javaee6.portfolios.PortfoliosApplication</mainClass>
+						</configuration>
+					</plugin>
+					<!--  Build the docker image and push it to docker hub -->
+			        <plugin>
+		       			<groupId>com.spotify</groupId>
+       					<artifactId>dockerfile-maven-plugin</artifactId>
+       					<version>${dockerfile-maven-version}</version>
+       					<executions>
+         					<execution>
+           						<phase>package</phase>
+			           			<goals>
+            						<goal>build</goal>
+             						<goal>push</goal>
+			           			</goals>
+			        		</execution>
+      					</executions>
+      					<configuration>
+        					<repository>${docker.image.prefix}/${project.artifactId}</repository>
+        					<tag>4.0.15</tag>
+				    		<buildArgs>
+          						<JAR_FILE>target/${project.artifactId}-${project.version}.war</JAR_FILE>
+				    		</buildArgs>
+						    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+			    		</configuration>
+    				</plugin>
+				</plugins>
+			</build>
+		</profile>
 
 	</profiles>
 
