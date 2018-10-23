@@ -57,6 +57,6 @@ RUN chmod 666 $DAYTRADER_TRUSTSTORE_LOCATION
 ARG WAR_FILE=target/$DAYTRADER_WAR_ARTIFACTID-$DAYTRADER_APP_VERSION.war
 ADD ${WAR_FILE} app.war
 
-ENV JAVA_OPTS="-Djavax.net.debug=all -Djavax.net.ssl.trustStore=/var/ssl/daytrader/truststore.jks -Djavax.net.ssl.trustStorePassword=password"
+ENV JAVA_OPTS="-Djavax.net.ssl.trustStore=/var/ssl/daytrader/truststore.jks -Djavax.net.ssl.trustStorePassword=password"
 
 ENTRYPOINT exec java $JAVA_OPTS -jar app.war
