@@ -53,17 +53,20 @@ public class PortfoliosApplication extends SpringBootServletInitializer {
 	}
 
 	@Bean
-	public TomcatEmbeddedServletContainerFactory tomcatFactory() {
-		return new TomcatEmbeddedServletContainerFactory() {
-
+	public TomcatEmbeddedServletContainerFactory tomcatFactory() 
+	{
+		TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory() 
+		{
 			@Override
-			protected TomcatEmbeddedServletContainer getTomcatEmbeddedServletContainer(Tomcat tomcat) {
+			protected TomcatEmbeddedServletContainer getTomcatEmbeddedServletContainer(Tomcat tomcat) 
+			{
 				tomcat.enableNaming();
 				return super.getTomcatEmbeddedServletContainer(tomcat);
 			}
-
+			
 			@Override
-			protected void postProcessContext(Context context) {
+			protected void postProcessContext(Context context) 
+			{
 				//
 				// Portfolios Data Source
 				//
@@ -81,8 +84,9 @@ public class PortfoliosApplication extends SpringBootServletInitializer {
 				portfoliosDataSource.setProperty("maxWait", "10000");
 				context.getNamingResources().addResource(portfoliosDataSource);
 			}
-			
 		};
+		
+		return factory;
 	}
 }
 

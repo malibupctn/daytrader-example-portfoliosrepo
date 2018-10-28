@@ -426,7 +426,7 @@
       					</executions>
       					<configuration>
         					<repository>${docker.image.prefix}/${project.artifactId}</repository>
-        					<tag>4.0.17</tag>
+        					<tag>4.0.18</tag>
 				    		<buildArgs>
           						<JAR_FILE>target/${project.artifactId}-${project.version}.war</JAR_FILE>
 				    		</buildArgs>
