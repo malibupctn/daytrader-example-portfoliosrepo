@@ -56,75 +56,119 @@ Note: attributes not directly related to portfolios are struck through in the di
 
 
 
-
 ## Prerequisites
 
 ### Installation
 
-		1.	Java Development Kit (64 bit) 1.8+
-		2.	Apache Maven 3.3.9+
-		3.  DockerHub Account (https://hub.docker.com/)
-		4.  Docker (https://www.docker.com/get-docker)
-		5.  kubectl 1.10.3+ (https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html)
-		6.  Minikube (https://kubernetes.io/docs/tasks/tools/install-minikube/)
-		7.  AWS CLI (https://docs.aws.amazon.com/cli/latest/userguide/installing.html)
+#### For building Docker images and pushing them to a Docker registry
+
+		1.	Inatall Java Development Kit (64 bit) 1.8+
+		2.	Install Apache Maven 3.3.9+
+		3.  Create DockerHub Account (https://hub.docker.com/)
+		4.  Install Docker (https://www.docker.com/get-docker)
+		
+#### For deploying and managing applications on Kubernetes
+
+		1.  Install kubectl (https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+#### For running Kubernetes on Minikube 
+
+		1.  Install Minikube (https://kubernetes.io/docs/setup/minikube/)
+
+#### For running Kubernetes on Amazon EKS
+
+		1.  Create AWS Account (https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/)
+		2.  Install AWS IAM Authenticator (https://docs.aws.amazon.com/eks/latest/userguide/configure-kubectl.html)
+		2.  Install AWS Command Line Interface (https://docs.aws.amazon.com/cli/latest/userguide/installing.html)
+		3.  Install eksctl (https://github.com/weaveworks/eksctl)
+
 
 ### Configuration
 
-#### DockerHub
+#### Maven
 
         The following settings are required for Maven to push Docker images to you DockerHub account
 
-        1.  Change the following property in the "daytrader-portfolios" pom.xml file to your DockerHub user name:
+        1.  Change the following property in daytrader-accounts/pom.xml to your DockerHub user name:
     
             <docker.image.prefix>${user.name}</docker.image.prefix>
-    
-        2.  Add your DockerHub account settings as shown below to your Maven ~/.m2/settings.xml  
-
-            <servers>
-              <server>
-                    <id>docker.io</id>
-                    <username>docker_username</username>
-                    <password>docker_password</password>
-                </server>
-            </servers>
+               
+        3.  Change the following key-value in daytrader-accounts/env/external/k8s/accounts-deployment.yaml to your DockerHub user name
         
+            image: YOUR_DOCKERHUB_USERNAME/daytrader-gateway:4.0.18
+        
+        4.  The following property in daytrader-accounts/pom.xml is also worth noting. You do not have to change it, but if you do, change the above key-value accordingly.
+        
+    		<tag>4.0.18</tag>
+        
+        5.  Add the following settings to your Maven ~/.m2/settings.xml so Maven can push images to your DockerHub account
+
+                <servers>
+                  <server>
+                        <id>docker.io</id>
+                        <username>YOUR_DOCKERHUB_USERNAME</username>
+                        <password>YOUR_DOCKERHUB_PASSWORD</password>
+                    </server>
+                </servers>       
    
-    
-#### kubectl
-
-        1.  See https://docs.aws.amazon.com/eks/latest/userguide/configure-kubectl.html
-    
-            ## Follow the instructions in section "Install and Configure kubectl for Amazon EKS"
         
+
+#### AWS CLI
+
+        1.  Configuring the AWS CLI (https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
+
+                
                 
 #### Kubernetes Cluster
 
-        You have to have at least one cluster.
+        1.  You must have at least one Kubernetes cluster.
 
-        1.  For Minikube, 
+                a.  For Minikube,
         
-            $ minikube --memory 8192 --cpus 2 start
+                    $ minikube --memory 8192 --cpus 2 start
             
-            ## Minikube comes pre-installed with a single node cluster that runs on your local computer
+                    ## Minikube comes with a cluster. It was running out of memory so increased to 8GB of RAM. You may be able to run with less RAM, but that setting worked well.
             
-        2.  For EKS, Follow steps 1 to 3 in the getting started guide
+                b.  For EKS, 
         
-            https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html#eks-create-cluster
-        
-        3.  If you installed Minikube and EKS, then you will have two contexts in your ~/.kube/config file: one for the Minikube cluster and the other 
-            for the EKS cluster. This means that you will need to point kubectl to the correct cluster when running commands. To make it easier to do 
-            that, 
+                    $ eksctl create cluster --name=user116-eks-cluster --region=us-east-1
             
-                a.  Open the ~/.kube/config file and change the "name" of the AWS context to "eks".
+                    ## This command creates an EKS cluster named user116-eks-cluster in the us-east-1 region. For additional details on parameters, see https://github.com/weaveworks/eksctl
             
-                b.  Enter one of the following commands to kubectl to access the Minikube or the EKS cluster
-        
-                        - For Minikube, type "kubectl config set-context minikube"
+        2.  If you installed Minikube and Amazon EKS, then you will have two contexts in your ~/.kube/config file. One of those contexts is for accessing the Minikube
+            cluster; the other context is for accessing the EKS cluster. You must set the context to the cluster before running kubectl commands. Set the context once
+            then all subsequent kubectl commands will be directed to that cluster. Set it again and the kubectl commands will go to the other cluster. To do that,
+                  
+                a.  For Minikube, 
+                
+                    $ kubectl config use-context minikube
                         
-                        - For EKS, type "kubectl config set-context eks"
+                b.  For Amazon EKS, 
+                
+                    $ kubectl config use-context user116-eks-cluster  ## Use the name of your Amazon EKS cluster
+
+        3.  Now you can verify your cluster by running some kubectl commands
         
-            Notes: After setting the context all subsequent commends go to that cluster. To change clusters, simply set the context to the other cluster.
+                a.  For Minikube
+        
+                    $ kubectl config use-context minikube
+                    
+                    Switched to context "minikube".
+
+                    $ kubectl cluster-info
+                    
+                    Kubernetes master is running at https://192.168.99.100:8443
+                    KubeDNS is running at https://192.168.99.100:8443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+                        
+                b.  For Amazon EKS,
+        
+                    $ kubectl config use-context user116-eks-cluster  ## Use the name of your Amazon EKS cluster
+                    
+                    Switched to context "user116-eks-cluster".
+            
+                    $ kubectl kubectl cluster-info
+                    
+                    Kubernetes master is running at https://8D36DB7CBD2E3394FF0843CEA0C0A266.sk1.us-east-1.eks.amazonaws.com
    
 
 
