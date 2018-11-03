@@ -89,15 +89,15 @@ Note: attributes not directly related to portfolios are struck through in the di
 
         The following settings are required for Maven to push Docker images to you DockerHub account
 
-        1.  Change the following property in daytrader-accounts/pom.xml to your DockerHub user name:
+        1.  Change the following property in daytrader-portfolios/pom.xml to your DockerHub user name:
     
             <docker.image.prefix>${user.name}</docker.image.prefix>
                
-        3.  Change the following key-value in daytrader-accounts/env/external/k8s/accounts-deployment.yaml to your DockerHub user name
+        3.  Change the following key-value in daytrader-portfolios/env/external/k8s/portfolios-deployment.yaml to your DockerHub user name
         
             image: YOUR_DOCKERHUB_USERNAME/daytrader-gateway:4.0.18
         
-        4.  The following property in daytrader-accounts/pom.xml is also worth noting. You do not have to change it, but if you do, change the above key-value accordingly.
+        4.  The following property in daytrader-portfolios/pom.xml is also worth noting. You do not have to change it, but if you do, change the above key-value accordingly.
         
     		<tag>4.0.18</tag>
         
@@ -225,25 +225,65 @@ Note: attributes not directly related to portfolios are struck through in the di
             ##  You should see : Tomcat started on port(s): 1443 (https)
         
         
+        
 #### Create the service so clients can communicate with pods via a constant IP
 
-        It is important to norte that pods are ephemeral. If a pod dies, then Kubernetes may create an identical pod but it will have a 
-        different IP. This means that clients shold not communicate with the pod IPs. Instead, all pods should be fronted by a service,
-        and any communication to the pods go through the service IP. To create the service,
+        Before creating the service it is important to understand that rationale for creating them. Remember that pods are ephemeral. If 
+        a pod dies, then Kubernetes may create an identical pod but the pod will have a different IP. This means that clients should not 
+        communicate with pods via the pod IP. Instead you should frontend all pods by a service, and clients should communicate with pods 
+        through the service IP. 
+        
+        To create the service,
 
-        1.  apply -f portfolios-service.yaml
+            1.  $ apply -f portfolios-service.yaml
         
-        2.  kubectl get services
+            2.  $ kubectl get services
         
-            ## Note of the CLUSTER-IP; that's the IP of the service proxy
-             
-        3.  $ kubectl exec {POD_NAME} -- curl -k https://{CLUSTER-IP}/health
+                NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)         AGE
+                daytrader-portfolios     ClusterIP   10.100.17.24     <none>        443/TCP         3d
+       
+                ## Notes
         
-            ## The above command instructs Kubernetes to execute the "curl" command inside the container of one of the pods. 
-            ## Curl sent an HTTPS request to the service IP; which is backed by one of more pods. The service proxy selected
-            ## a random pod and forwarded the request to it. The application running inside the pod handled the request, and
-            ## an HTTPS response indicating that it is "UP". So you should see {"status":"UP"}
+                a.  The above command creates a service proxy. The service proxy listens on the CLUSTER IP and PORT. It is backed by endpoints 
+                    to one or more pods. When the service proxy receives an HTTPS request, it selects one of the endpoints (pods) and forwards 
+                    it to the pod. The application running in the pod handles the request and returns an HTTPS response
             
+                b.  There is no EXTERNAL-IP to the service. This means that you can't access this service from outside the cluster. You can only 
+                    access it from inside the cluster or from another component that resides inside the cluster. These options will be described 
+                    below
+        
+        To access the service from inside the cluster,
+            
+            1.  $ kubectl get pods
+        
+                # Note the NAME of the portfolios pod; you'll need it to execute the next command
+        
+            2.  $ kubectl exec <POD_NAME> -it - curl -k https://<CLUSTER-IP>/health
+        
+            -- OR --
+            
+                $ kubectl exec <POD_NAME> -it - curl -k https://<SERVICE_NAME>/health
+            
+            ## Notes
+        
+                a.  These 'curl' commands don't work if you run them in the portfolios pod on Minikube. If you run them on another POD, they do work.
+        
+                b.  These commands instruct Kubernetes to execute the "curl" command inside the container of one of the pods. Curl then sends an HTTPS 
+                    request to the service IP; which is backed by one of more pods. The service proxy selected a random pod and forwarded the request 
+                    to it. The application running inside the pod handled the request, and an HTTPS response indicating that it is "UP".  
+            
+        To access the service from outside the cluster, using the API server
+                        
+            1.  $ kubectl proxy
+        
+                Starting to serve on 127.0.0.1:8001
+                
+                ## Takes care of locating and authenticating to the API server.
+
+            2.  $ curl -k http://localhost:8001/api/v1/namespaces/default/services/https:daytrader-portfolios:/proxy/health
+        
+                ## The above command accesses the portfolios service through the API Server.
+
         See also https://kubernetes.io/docs/concepts/services-networking/service/
 
       
