@@ -27,11 +27,17 @@ spec:
             path: /health
             scheme: HTTPS
             port: 3443
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          timeoutSeconds: 10
         livenessProbe:  
           httpGet:
             path: /health
             scheme: HTTPS
             port: 3443
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          timeoutSeconds: 10
         env:
         - name: ACCOUNTS_SERVICE_ROUTE
           value: https://daytrader-accounts
