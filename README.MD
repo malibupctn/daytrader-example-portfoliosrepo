@@ -214,7 +214,7 @@ Note: attributes not directly related to portfolios are struck through in the di
 
 	    1.  $ cd daytrader-portfoliosapp\daytrader-portfolios\env\external\k8s
     
-		2.	$ kubectl apply -f portfolios-deployment.yaml 
+		2.	$ kubectl apply -f daytrader-portfolios-deployment.yaml 
 		
 		3.  $ kubectl get pods -o wide
 		
@@ -235,7 +235,7 @@ Note: attributes not directly related to portfolios are struck through in the di
         
         To create the service,
 
-            1.  $ apply -f portfolios-service.yaml
+            1.  $ kubectl apply -f daytrader-portfolios-service.yaml
         
             2.  $ kubectl get services
         
@@ -258,7 +258,7 @@ Note: attributes not directly related to portfolios are struck through in the di
         
                 # Note the NAME of the portfolios pod; you'll need it to execute the next command
         
-            2.  $ kubectl exec <POD_NAME> -it - curl -k https://<CLUSTER-IP>/health
+            2.  $ kubectl exec <POD_NAME> -it -- curl -k https://<CLUSTER-IP>/health
             
                 {"status":"UP"}
   
