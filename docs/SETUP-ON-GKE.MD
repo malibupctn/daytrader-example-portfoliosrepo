@@ -27,21 +27,25 @@
     
 4.  Configure kubeconfig
 
-At this point you should have a cluster and `~/.kube/config` file created. That file has information the clusters you created. The `kubectl` command line interface uses that information to locate and authenticate to a cluster. If you have multiple clusters, then you can use `kubectl config use-context CONTEXT_NAME` command to point kubectl to a specific cluster. To make it easier to work with multiple clusters, edit the context name in the config file. To do that, 
+At this point you should have a cluster and `~/.kube/config` file created. That file has information about the cluster(s) you created. The `kubectl` command line interface uses that information to locate and authenticate to a cluster. If you have multiple clusters, then you can use `kubectl config use-context CONTEXT_NAME` command to point kubectl to a specific cluster. To make it easier for you to work with multiple clusters, edit the context name in the config file. For example,
 
-**Origonal ~/.kube/config**
+**Original ~/.kube/config**
 
+```yaml
 - context:
     cluster: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
     user: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
   name: `arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster`
+```
 
 **Modified ~/.kube/config**
 
+```yaml
 - context:
     cluster: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
     user: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
   name: `daytrader-eks-cluster`
+```
         
 5.  Verify that the cluster is running
 
@@ -60,9 +64,9 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
             
     NAME | STATUS | ROLES | AGE | VERSION
     ---- | ------ | ----- | --- | -------
-    gke-daytrader-gke-cluste-default-pool-xxxxxxxx-xxxx | Ready | <none> | 7m11s | v1.9.7-gke.11
-    gke-daytrader-gke-cluste-default-pool-xxxxxxxx-xxxx | Ready | <none> | 7m11s | v1.9.7-gke.11
-    gke-daytrader-gke-cluste-default-pool-xxxxxxxx-xxxx | Ready | <none> | 7m11s | v1.9.7-gke.11
+    gke-daytrader-gke-cluste-default-pool-xxxxxxxx-xxxx | Ready | `<none>` | 7m11s | v1.9.7-gke.11
+    gke-daytrader-gke-cluste-default-pool-xxxxxxxx-xxxx | Ready | `<none>` | 7m11s | v1.9.7-gke.11
+    gke-daytrader-gke-cluste-default-pool-xxxxxxxx-xxxx | Ready | `<none>` | 7m11s | v1.9.7-gke.11
 
 ### Install the NGINX Ingress Controller
       
