@@ -24,16 +24,39 @@
     `$ gcloud container clusters get-credentials daytrader-gke-cluster`
             
     This command updates your kubeconfig so that the kubectl command can connect to your new cluster.
-            
-4.  Verify that the cluster is running
+    
+4.  Configure kubeconfig
+
+At this point you should have a cluster and `~/.kube/config` file created. That file has information the clusters you created. The `kubectl` command line interface uses that information to locate and authenticate to a cluster. If you have multiple clusters, then you can use `kubectl config use-context CONTEXT_NAME` command to point kubectl to a specific cluster. To make it easier to work with multiple clusters, edit the context name in the config file. To do that, 
+
+**Origonal ~/.kube/config**
+
+- context:
+    cluster: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
+    user: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
+  name: `arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster`
+
+**Modified ~/.kube/config**
+
+- context:
+    cluster: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
+    user: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
+  name: `daytrader-eks-cluster`
+        
+5.  Verify that the cluster is running
 
     `$ kubectl cluster-info`
                 
     You should see `Kubernetes master is running at https://35.184.21.226`
 
-5.  Verify that the worker nodes are running
+6.  Verify that the worker nodes are running
 
-    `$ kubectl get nodes`
+     
+    a.  `$ kubectl config use-context daytrader-gke-cluster`
+                    
+    You should see `Switched to context daytrader-gke-cluster`
+
+    b.  `$ kubectl get nodes`
             
     NAME | STATUS | ROLES | AGE | VERSION
     ---- | ------ | ----- | --- | -------

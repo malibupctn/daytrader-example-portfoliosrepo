@@ -35,7 +35,7 @@
 
     This command starts the application, runs the integration tests, and stops the application
 
-    **TODO** Add a `ci-k8s` Maven profile to run these integration tests. (See Run on Spring Boot)
+**TODO** Add a `ci-k8s` Maven profile to run the integration tests. (See Run on Spring Boot)
     
 ### Stop the Portfolios
 
