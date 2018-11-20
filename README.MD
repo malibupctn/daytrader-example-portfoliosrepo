@@ -92,9 +92,13 @@ You can run the application on Spring Boot or on the Kubernetes Cluser.
 
 1.  [Run on Spring Boot](docs/RUN-ON-SPRING-BOOT.MD)
 
-2.  [Run on Kubernetes Cluster](docs/RUN-ON-SPRING-BOOT.MD)
+2.  [Run on Kubernetes](docs/RUN-ON-KUBERNETES.MD)
 
-**Note** Portfolios is 100% portable across the Kubernetes Platforms we tested.
+**Notes** 
+
+1.  The Accounts application codebase was 100% portable across the Kubernetes platforms that we tested.
+
+2.  This means that you can write the code once and run it on any platform. This is great news for developers!
 
 
     
@@ -202,11 +206,9 @@ Deployment to Kubernetes required a number of manual steps. Some of these steps 
 
 **Notes** 
 
-1.  All configuration files are located in this folder: `daytrader-portfoliosapp/daytrader-portfolios/env/external/k8s`
+1.  All configuration files and `kubectl` commands were 100% portable across the Kubernetes platforms that we tested.
 
-2.  All configuration files and `kubectl` commands were 100% portable across the Kubernetes platforms we tested.
-
-    This means you write configuration files once and run them on any platform. This is great news for DevOps!
+2.  This means you can write configuration files once and run them on any platform. This is great news for DevOps!
 
 ### Create the Deployment for our Docker Image
 
