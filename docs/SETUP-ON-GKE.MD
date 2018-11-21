@@ -44,7 +44,7 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
 - context:
     cluster: gke_daytrader-xxxxxx_us-central1-a_daytrader-gke-cluster
     user: gke_daytrader-xxxxxx_us-central1-a_daytrader-gke-cluster
-  name: `daytrader-gke-cluster`
+  name: daytrader-gke-cluster
 ```
         
 5.  Verify that the cluster is running

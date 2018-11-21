@@ -19,7 +19,7 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
 - context:
     cluster: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
     user: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
-  name: `arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster`
+  name: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
 ```
 
 **Modified ~/.kube/config**
@@ -28,7 +28,7 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
 - context:
     cluster: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
     user: arn:aws:eks:us-east-1:xxxxxxxxxxxx:cluster/daytrader-eks-cluster
-  name: `daytrader-eks-cluster`
+  name: daytrader-eks-cluster
 ```
 
 3.  Verify the EKS Cluster
@@ -88,6 +88,12 @@ The Kubernetes is a great resource for managing and troubleshooting the cluster.
 2.  Start the proxy so you can authenticate with the Kubernetes API Server
 
     `$ kubectl proxy`
+    
+    You should see `Starting to serve on 127.0.0.1:8001`
+            
+    If you see a port binding error, start the proxy on a different port, e.g.
+
+    `$ kubectl proxy --port=8002`
 
 3.  Open the following link to access the Kubernetes Dashboard through the API Server
         
