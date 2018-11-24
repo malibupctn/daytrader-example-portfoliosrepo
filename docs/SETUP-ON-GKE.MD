@@ -74,36 +74,44 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
         
     `$ kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $(gcloud config get-value account)`
     
-    This command grants your GCP user account the permissions to administer the cluster.
-                    
-2.  Deploy the NGINX Ingress Controller
+    This command creates a cluster role binding to administer the cluster and adds your GCP user account to that role
     
-    a.  `$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml`
-            
-    b.  `$ kubectl -n ingress-nginx get pods`
-                
-    NAMESPACE | NAME | READY | STATUS | RESTARTS | AGE
-    --------- | ---- | ----- | ------ | -------- | --- 
-    ingress-nginx | nginx-ingress-controller-xxxxxxxxx-xxxxx | 1/1 | Running | 0 | 39s
-    
-    Wait for the controller start. It may take a few minutes
+    **Note:** other Kubernetes platforms automatically add the user that created the cluster to the cluster-admin role.
 
-3.  Create the NGINX Ingress Service
+2.  Create tha namespace; otherwise cloud-generic.yaml will have errors
+        
+    a.  `$ cd daytrader-webapp/daytrader-web/env/external/k8s`
+            
+    b.  `$ kubectl apply -f ingress-namespace.yaml`
     
+3.  Deploy the NGINX Load Balancer
+
     a.  `$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml`
-                
+    
     b.  `$ kubectl -n ingress-nginx get services`
-                
+                    
     NAME | TYPE | CLUSTER-IP | EXTERNAL-IP | PORT(S) | AGE
     ---- | ---- | ---------- | ----------- | ------- | ---
     ingress-nginx | LoadBalancer | 10.7.252.186 | xx.xx.xx.xx | 80:31884/TCP,443:31058/TCP | 55s
     
-    Wait for the service to start. It may take a few minutes.
+    Wait for the load balancer to be assigned an EXTERNAL-IP. It may take a few minutes
+                
+4.  Deploy the NGINX Ingress Controller
+
+    a.  `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml`
     
-4.  Review the controller's logs. This is also useful for troubleshooting ingress resources.
-
-    `$ kubectl -n ingress-nginx logs nginx-ingress-controller-*********-*****`
-
+    b.  `$ kubectl -n ingress-nginx get pods`
+                    
+    NAME | READY | STATUS | RESTARTS | AGE
+    ---- | ----- | ------ | -------- | --- 
+    nginx-ingress-controller-xxxxxxxxx-xxxxx | 1/1 | Running | 0 | 39s
+    
+    Wait for the controller start. It may take a few minutes
+    
+5.  Review the logs to verify the installation. This is also useful for troubleshooting ingress resources.
+                
+    `$ kubectl -n ingress-nginx logs nginx-ingress-controller-xxxxxxxxx-xxxxx`
+                   
     You should see `successfully acquired lease ingress-nginx/ingress-controller-leader-nginx`
                             
 ### Install the Kubernetes Dashboard (N/A)

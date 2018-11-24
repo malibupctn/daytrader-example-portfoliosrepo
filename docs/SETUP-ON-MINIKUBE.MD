@@ -36,13 +36,9 @@
 
 ### Install the NGINX Ingress Controller
         
-1.  Create configmaps for tcp-services and udp-services; otherwise the controller will throw an unexpected error
+1.  Create configmaps; otherwise the ingress controller will throw `Error getting ConfigMap`
         
-    a.  `$ cd daytrader-webapp/daytrader-web/env/external/k8s`
-            
-    b.  `$ kubectl apply -f tcp-services-configmap.yaml`
-            
-    c.  `$ kubectl apply -f udp-services-configmap.yaml`
+    `$ kubectl apply -f https://github.com/kubernetes/minikube/blob/master/deploy/addons/ingress/ingress-configmap.yaml`
         
 2.  Enable the ingress add-on
        
@@ -72,13 +68,10 @@ The Kubernetes Dashboard can be useful for managing and troubleshooting your clu
 
 This command opens the Kubernetes Dashboard in a browser
         
-
 ## Resources 
 
 1.  [Running Kubernetes Locally via Minikube](https://kubernetes.io/docs/setup/minikube/)
 
-2.  [Ingress ConfigMap](https://github.com/kubernetes/minikube/blob/master/deploy/addons/ingress/ingress-configmap.yaml/)
-
-3.  [NGINX Ingress Controller Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy/)
+2.  [NGINX Ingress Controller Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy/)
 
 

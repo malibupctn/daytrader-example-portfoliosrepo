@@ -51,21 +51,37 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
 
 ### Install the Ingres Controller
 
-1.  Deploy the NGINX Ingress Controller
-                
-    a.  `$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml`
+1.  Create the namespace; otherwise cloud-generic.yaml will have errors
+        
+    a.  `$ cd daytrader-webapp/daytrader-web/env/external/k8s`
+            
+    b.  `$ kubectl apply -f ingress-namespace.yaml`
     
-    b.  `$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml`
-                
-    c.  `$ kubectl -n ingress-nginx get pods`
+2.  Deploy the NGINX Load Balancer
+
+    a.  `$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml`
+    
+    b.  `$ kubectl -n ingress-nginx get services`
                     
-    NAMESPACE | NAME | READY | STATUS | RESTARTS | AGE
-    --------- | ---- | ----- | ------ | -------- | ---
-    ingress-nginx | nginx-ingress-controller-xxxxxxxxx-xxxxx | 1/1 | Running | 0 | 39s
+    NAME | TYPE | CLUSTER-IP | EXTERNAL-IP | PORT(S) | AGE
+    ---- | ---- | ---------- | ----------- | ------- | ---
+    ingress-nginx | LoadBalancer | 10.100.124.7 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxx.us-east-1.elb.amazonaws.com | 80:31878/TCP,443:31822/TCP | 16s
+    
+    Wait for the load balancer to be assigned an EXTERNAL-IP. It may take a few minutes
+                
+3.  Deploy the NGINX Ingress Controller
+
+    a.  `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml`
+    
+    b.  `$ kubectl -n ingress-nginx get pods`
+                    
+    NAME | READY | STATUS | RESTARTS | AGE
+    ---- | ----- | ------ | -------- | --- 
+    nginx-ingress-controller-xxxxxxxxx-xxxxx | 1/1 | Running | 0 | 39s
     
     Wait for the controller start. It may take a few minutes
-                    
-3.  Review the logs to verify the installation. This is also useful for troubleshooting ingress resources.
+    
+4.  Review the logs to verify the installation. This is also useful for troubleshooting ingress resources.
                 
     `$ kubectl -n ingress-nginx logs nginx-ingress-controller-xxxxxxxxx-xxxxx`
                    
@@ -73,7 +89,7 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
                     
 ### Install the Kubernetes Dashboard
 
-The Kubernetes is a great resource for managing and troubleshooting the cluster. To install it,
+The Kubernetes Dashboard can be useful for managing and troubleshooting the cluster. To install it,
                    
 1.  Get the token so you can authenticate with the Kubernetes Dashboard
 
