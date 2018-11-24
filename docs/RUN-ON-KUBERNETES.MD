@@ -49,13 +49,13 @@
 
 1.  Start the Portfolios
 
-2.  `kubectl port-forward daytrader-portfolios-xxxxxxxxx-xxxxx`
+2.  `kubectl port-forward daytrader-portfolios-xxxxxxxxx-xxxxx 3888:3443`
 
-    You should see `Forwarding from 127.0.0.1:8888 -> 3443`
+    You should see `Forwarding from 127.0.0.1:3888 -> 3443`
     
-    This command forwards local port 8888 to port 3443 of your Pod
+    This command forwards local port 3888 to port 3443 of your Pod
 
-3.  Point you browser to `https://localhost:3443/swagger-ui.html`
+3.  Point you browser to `https://localhost:3888/swagger-ui.html`
 
 4.  Stop the Portfolios after reviewing the APIs
 

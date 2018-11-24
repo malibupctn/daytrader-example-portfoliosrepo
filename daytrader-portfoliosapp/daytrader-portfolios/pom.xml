@@ -322,6 +322,8 @@
 										<javax.net.ssl.trustStorePassword>${daytraderTruststorePassword}</javax.net.ssl.trustStorePassword>
 									</systemPropertyVariables>
 									
+                                    <!-- Don't use system class loader or else maven-failsafe-plugin fails --> 
+                                    <useSystemClassLoader>false</useSystemClassLoader>
 								</configuration>
 							</execution>
 						</executions>

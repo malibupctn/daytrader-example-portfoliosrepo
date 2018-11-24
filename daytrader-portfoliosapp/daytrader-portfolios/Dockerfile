@@ -17,8 +17,8 @@ ENV DAYTRADER_WAR_ARTIFACTID=daytrader-portfolios
 # Set database variables
 ENV DAYTRADER_DATABASE_DRIVER=org.apache.derby.jdbc.EmbeddedDriver
 ENV DAYTRADER_DATABASE_URL='jdbc:derby:tradesdb;create=true'
-ENV DAYTRADER_DATABASE_USERNAME=xxx
-ENV DAYTRADER_DATABASE_PASSWORD=xxx
+ENV DAYTRADER_DATABASE_USERNAME=
+ENV DAYTRADER_DATABASE_PASSWORD=
 
 # Set tomcat variables
 ENV SERVER_PORT=3443
@@ -37,6 +37,9 @@ ENV DAYTRADER_QUOTES_SERVICE=https://daytrader-quotes
 ENV DAYTRADER_LOG_FILENAME=/var/log/daytrader/$DAYTRADER_APP_ARTIFACTID-$DAYTRADER_APP_VERSION.log
 ENV DAYTRADER_LOG_LEVEL=TRACE
 ENV DAYTRADER_LOG_APPENDER=ConsoleAppender
+
+# Create the database folder
+RUN mkdir -p -m 0777 /var/dat/daytrader
 
 # Create the log folder
 RUN mkdir -p -m 0777 /var/log/daytrader

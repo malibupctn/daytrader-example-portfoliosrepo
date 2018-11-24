@@ -25,8 +25,8 @@ set DAYTRADER_WAR_ARTIFACTID=daytrader-portfolios
 echo "set database variables"
 set DAYTRADER_DATABASE_DRIVER=org.apache.derby.jdbc.EmbeddedDriver
 set DAYTRADER_DATABASE_URL=jdbc:derby:tradesdb;create=true
-set DAYTRADER_DATABASE_USERNAME=xxx
-set DAYTRADER_DATABASE_PASSWORD=xxx
+set DAYTRADER_DATABASE_USERNAME=
+set DAYTRADER_DATABASE_PASSWORD=
 
 @ECHO OFF
 echo "set spring variables"
