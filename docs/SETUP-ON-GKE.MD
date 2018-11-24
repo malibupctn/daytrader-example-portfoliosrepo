@@ -82,7 +82,7 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
         
     a.  `$ cd daytrader-webapp/daytrader-web/env/external/k8s`
             
-    b.  `$ kubectl apply -f ingress-namespace.yaml`
+    b.  `$ kubectl apply -f ingress-nginx-namespace.yaml`
     
 3.  Deploy the NGINX Load Balancer
 

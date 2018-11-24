@@ -68,9 +68,9 @@
         
     a.  `$ cd daytrader-webapp/daytrader-web/env/external/k8s`
             
-    b.  `$ kubectl apply -f ingress-namespace.yaml`
+    b.  `$ kubectl apply -f ingress-nginx-namespace.yaml`
     
-    c.  `$ kubectl apply -f ingress-configmap.yaml`
+    c.  `$ kubectl apply -f ingress-nginx-configmap.yaml`
 
 2.  Deploy the NGINX Load Balancer
 
