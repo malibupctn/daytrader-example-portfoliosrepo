@@ -5,58 +5,51 @@
 
 1.  `$ cd daytrader-portfoliosapp`
 
-2.  `$ mvn -Pcd clean install`
+2.  `$ mvn -Pkubernetes package`
 
     This command builds the Docker Image and pushes it to the DockerHub registry
 
 ### Start the Portfolios
 
-1.  `$ kubectl apply -f daytrader-portfolios/env/external/k8s/deployment.yaml`
+1.  `$ kubectl config use-context YOUR_CLUSTER_NAME`
 
-    This command pulls the image from DockerHub and deploys it to the Kubernetes Cluster
-    
-2.  `$ kubectl get pods --watch`
-    
-    NAME | READY | STATUS | RESTARTS | AGE
-    ---- | ----- | ------ | -------- | ---
-    daytrader-portfolios-xxxxxxxxx-xxxxx | 1/1 | Running | 0 | 6m
-    
-    Watch until you see READY `1/1` and STATUS `Running` then Ctrl-c to stop watching
-    
-3.  `$ kubectl apply -f daytrader-portfolios/env/external/k8s/service.yaml`
+    This command chooses the cluster; *run it if you haven't already done so*
 
-**TODO** Add a `deploy_server` shell script to run these commands. (See Run on Spring Boot)
+2.  `$ env/external/kubernetes/bin/create_service.sh`
+
+    This command creates the deployment; waits for it to start, creates the service, and starts kubectl proxy
+        
+    Note if the deployment (or service) exist and its specification has not changed then it is not re-created
 
 ### Test the Portfolios
+
+1.  `$ kubectl config use-context YOUR_CLUSTER_NAME`
+
+    This command chooses the cluster; *run it if you haven't already done so*
                                    
-1.  `$ cd daytrader-portfolios`
+2.  `$ mvn -Pkubernetes verify`
 
-2.  `$ mvn -Pci-k8s clean install`
-
-    This command starts the application, runs the integration tests, and stops the application
-
-**TODO** Add a `ci-k8s` Maven profile to run the integration tests. (See Run on Spring Boot)
+    This command creates the service (if it didn't exist), runs the integration tests, then deletes the service
+    
+    If the service existed, the command reuses the service, runs the integration tests, and deletes the service
     
 ### Stop the Portfolios
 
-1.  `$ kubectl delete deployments daytrader-portfolios`
+1.  `$ kubectl config use-context YOUR_CLUSTER_NAME`
 
-2.  `$ kubectl delete services daytrader-portfolios`
+    This command chooses the cluster; *run it if you haven't already done so*
 
-**TODO** Add an `undeploy_server` shell script to run these commands. (See Run on Spring Boot)
+2.  `$ env/external/kubernetes/bin/delete_service.sh`
+
+    This command creates the deployment; deletes the service; and stops the kubectl proxy
 
 ### Review the Swagger Documentation
 
-1.  Start the Portfolios
+1.  Start the Portfolios; *if you haven't already done so*
 
-2.  `kubectl port-forward daytrader-portfolios-xxxxxxxxx-xxxxx 3888:3443`
+2.  Point you browser to `http://localhost:8001/api/v1/namespaces/default/services/https:daytrader-portfolios:/proxy/swagger-ui.html`
 
-    You should see `Forwarding from 127.0.0.1:3888 -> 3443`
-    
-    This command forwards local port 3888 to port 3443 of your Pod
+3.  Stop the Portfolios after reviewing the APIs
 
-3.  Point you browser to `https://localhost:3888/swagger-ui.html`
-
-4.  Stop the Portfolios after reviewing the APIs
 
 
