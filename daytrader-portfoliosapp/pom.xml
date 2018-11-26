@@ -18,6 +18,11 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+	<!-- 
+	spring-boot-starter-parent: provides useful Maven defaults. It also provides a 
+	dependency-management section so that you can omit version tags for existing 
+	dependencies.
+	-->
   	<parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -60,6 +65,7 @@
 	</dependencies>
 	<build>
 		<plugins>
+		
 			<!-- Set JDK compiler version  -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -68,7 +74,8 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
-			</plugin>			
+			</plugin>
+
 			<!-- Workaround: Spring Boot fails to run maven-surefire-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
