@@ -29,7 +29,9 @@
 	<packaging>war</packaging>
 	
 	<dependencies>
+	
 		<!-- Module Dependencies -->
+		
 	    <dependency>
             <groupId>org.apache.geronimo.daytrader.javaee6.portfolios</groupId>
             <artifactId>daytrader-utilities</artifactId>            
@@ -45,6 +47,7 @@
         </dependency>
 		
 		<!-- Database Dependencies -->
+		
 	    <dependency>
 		    <groupId>org.apache.derby</groupId>
 		    <artifactId>derby</artifactId>
@@ -195,7 +198,7 @@
   				<activeByDefault>true</activeByDefault>
 			</activation>
   			 <properties>
-                <daytraderKeystoreFolder>${basedir}/src/main/resources/external/ssl</daytraderKeystoreFolder>
+                <daytraderKeystoreFolder>${project.basedir}/src/main/resources/external/ssl</daytraderKeystoreFolder>
                 <daytraderLogLevel>TRACE</daytraderLogLevel>
                 <daytraderLogFilename>/var/log/daytrader/${daytraderAppArtifactId}-${daytraderAppVersion}.log</daytraderLogFilename>
                 <daytraderLogAppender>ConsoleAppender</daytraderLogAppender>
@@ -297,8 +300,8 @@
                                         <condition property="buildScript" value="start_server.bat" else="start_server.sh">
                                             <os family="windows"/>
                                         </condition>
-                                        <echo>Starting ${project.basedir}/env/external/bin/${buildScript}</echo>
-                                        <exec executable="${project.basedir}/env/external/bin/${buildScript}" spawn="true">
+                                        <echo>Starting ${project.basedir}/env/external/springboot/bin/${buildScript}</echo>
+                                        <exec executable="${project.basedir}/env/external/springboot/bin/${buildScript}" spawn="true">
                                         </exec>
                                     </target>
                                 </configuration>
@@ -330,8 +333,8 @@
                                         <condition property="buildScript" value="stop_server.bat" else="stop_server.sh">
                                             <os family="windows"/>
                                         </condition>
-                                        <echo>Starting ${project.basedir}/env/external/bin/${buildScript}</echo>
-                                        <exec executable="${project.basedir}/env/external/bin/${buildScript}" spawn="true">
+                                        <echo>Starting ${project.basedir}/env/external/springboot/bin/${buildScript}</echo>
+                                        <exec executable="${project.basedir}/env/external/springboot/bin/${buildScript}" spawn="true">
                                         </exec>
                                     </target>
                                 </configuration>
@@ -351,11 +354,11 @@
   		<profile>
   			<id>kubernetes</id>
   			<properties>
-  				<daytraderKeystoreFolder>${basedir}/src/main/resources/external/ssl</daytraderKeystoreFolder>
+  				<daytraderKeystoreFolder>${project.basedir}/src/main/resources/external/ssl</daytraderKeystoreFolder>
 				<docker.image.prefix>${user.name}</docker.image.prefix>
 				<dockerfile-maven-version>1.4.0</dockerfile-maven-version>	
 
-                <daytraderKeystoreFolder>${basedir}/src/main/resources/external/ssl</daytraderKeystoreFolder>
+                <daytraderKeystoreFolder>${project.basedir}/src/main/resources/external/ssl</daytraderKeystoreFolder>
                 <daytraderLogLevel>TRACE</daytraderLogLevel>
                 <daytraderLogFilename>/var/log/daytrader/${daytraderAppArtifactId}-${daytraderAppVersion}.log</daytraderLogFilename>
                 <daytraderLogAppender>ConsoleAppender</daytraderLogAppender>

@@ -7,7 +7,7 @@ rem
 @echo off
 echo "set the current directory %cd%"
 set CURRENT_DIRECTORY=%cd%
-call "%CURRENT_DIRECTORY%\env\external\bin\setenv.bat"
+call "%CURRENT_DIRECTORY%\env\external\springboot\bin\setenv.bat"
 
 rem
 rem Stop the application

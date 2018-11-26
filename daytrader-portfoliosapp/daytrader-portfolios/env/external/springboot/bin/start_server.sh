@@ -8,7 +8,7 @@ export CURRENT_DIRECTORY=$(pwd)
 #
 # Set the environment
 #
-. "$CURRENT_DIRECTORY/env/external/bin/setenv.sh"
+. "$CURRENT_DIRECTORY/env/external/springboot/bin/setenv.sh"
 #
 # Launch the application
 #

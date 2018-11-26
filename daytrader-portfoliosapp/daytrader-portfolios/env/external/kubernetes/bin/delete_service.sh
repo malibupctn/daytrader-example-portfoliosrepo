@@ -9,18 +9,19 @@ export CURRENT_DIRECTORY=$(pwd)
 #
 # Delete the deployment
 #
-kubectl delete deployments $PROJECT_ARTIFACTID
+kubectl delete deployments daytrader-portfolios
 
 #
 # Delete the service
 #
-kubectl delete services $PROJECT_ARTIFACTID
+kubectl delete services daytrader-portfolios
 
 #
 # Stop the kubectl proxy
 #
-kill -9 $(pgrep -f "kubectl proxy")  
+kill -9 $(pgrep -f "create_service.sh")
+kill -9 $(pgrep -f "kubectl proxy") 
 
-echo "end of create_service.sh"
+echo "end of delete_service.sh"
 #
 # exit 0

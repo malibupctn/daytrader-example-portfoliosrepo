@@ -11,7 +11,7 @@ set CURRENT_DIRECTORY=%cd%
 rem
 rem Set the environment
 rem
-call "%CURRENT_DIRECTORY%\env\external\bin\setenv.bat"
+call "%CURRENT_DIRECTORY%\env\external\springboot\bin\setenv.bat"
 
 rem
 rem Launch the application

@@ -8,52 +8,78 @@
 The `Dockerfile` is where you define all the commands to setup the environment and start the Portfolios in the container.
 
 ```yaml
-FROM openjdk:8-jdk
-VOLUME /tmp
+##
+##  Use debian base image; instead of alpine linux -- it includes bash
+##
+FROM openjdk:8-jre 
+##
+##  Sets the author field of the generated image
+##
 MAINTAINER Donald Vines <donald_vines@hotmail.com>
-# Set ssl variables
+##
+##  Declare Docker ARGs whose values are set when building the image; but they are not available to the container
+##
+##  1.  App/WAR Name & Version
+ARG APP_ARTIFACTID
+ARG WAR_ARTIFACTID
+ARG APP_VERSION
+##  2.  Exposed Port
+ARG EXPOSE_PORT
+##  3.  Database's URL
+ARG DATABASE_DRIVER
+ARG DATABASE_URL
+ARG DATABASE_USERNAME
+ARG DATABASE_PASSWORD
+##
+##  Set Docker ENV Values that are not only available when building the image, but also to the running container
+##
+##  1. SSL Variables
 ENV DAYTRADER_KEYSTORE_FILENAME=/var/ssl/daytrader/keystore.jks
 ENV DAYTRADER_KEYSTORE_PASSWORD=password
 ENV DAYTRADER_TRUSTSTORE_LOCATION=/var/ssl/daytrader/truststore.jks
 ENV DAYTRADER_TRUSTSTORE_PASSWORD=password
-# Set app variables
-ENV DAYTRADER_APP_VERSION=4.0.0
-ENV DAYTRADER_APP_ARTIFACTID=daytrader-portfoliosapp
-ENV DAYTRADER_WAR_ARTIFACTID=daytrader-portfolios
-# Set database variables
-ENV DAYTRADER_DATABASE_DRIVER=org.apache.derby.jdbc.EmbeddedDriver
-ENV DAYTRADER_DATABASE_URL='jdbc:derby:tradesdb;create=true'
-ENV DAYTRADER_DATABASE_USERNAME=xxx
-ENV DAYTRADER_DATABASE_PASSWORD=xxx
-# Set tomcat variables
-ENV SERVER_PORT=3443
-ENV SERVER_PORT_HTTPS=3443
-# Make port visible
-EXPOSE 3443
-# Set service routes
+##  2.  Database Variables
+ENV DAYTRADER_DATABASE_DRIVER=${DATABASE_DRIVER}
+ENV DAYTRADER_DATABASE_URL=${DATABASE_URL}
+ENV DAYTRADER_DATABASE_USERNAME=${DATABASE_USERNAME}
+ENV DAYTRADER_DATABASE_PASSWORD=${DATABASE_PASSWORD}
+##  3.  Tomcat Variables
+ENV SERVER_PORT=${EXPOSE_PORT}
+ENV SERVER_PORT_HTTPS=${EXPOSE_PORT}
+##  4.  Routing Variables
 ENV DAYTRADER_ACCOUNTS_SERVICE=https://daytrader-accounts
 ENV DAYTRADER_GATEWAY_SERVICE=https://daytrader-gateway
 ENV DAYTRADER_PORTFOLIOS_SERVICE=https://daytrader-portfolios
 ENV DAYTRADER_QUOTES_SERVICE=https://daytrader-quotes
-# Set logging variables
-ENV DAYTRADER_LOG_FILENAME=/var/log/daytrader/$DAYTRADER_APP_ARTIFACTID-$DAYTRADER_APP_VERSION.log
+##  5.  Logging Variables
+ENV DAYTRADER_LOG_FILENAME=/var/log/daytrader/${APP_ARTIFACTID}-${APP_VERSION}.log
 ENV DAYTRADER_LOG_LEVEL=TRACE
 ENV DAYTRADER_LOG_APPENDER=ConsoleAppender
-# Create the log folder
+##
+##  Setup the environment for the running container
+##
+##  1.  Create Database Folder 
+RUN mkdir -p -m 0777 /var/dat/daytrader
+##  2.  Create Logging Folder, Logging File, & Set Permissions
 RUN mkdir -p -m 0777 /var/log/daytrader
-# Create the log file and set permissions
 RUN touch $DAYTRADER_LOG_FILENAME
 RUN chmod 666 $DAYTRADER_LOG_FILENAME
-# Create the ssl folder
+##  3.  Create SSL Folder, Add Truststore, & Set Permissions
 RUN mkdir -p -m 0777 /var/ssl/daytrader
-# Add the truststore to the container and set permissions
-ARG JKS_FILE=target/$DAYTRADER_WAR_ARTIFACTID-$DAYTRADER_APP_VERSION/WEB-INF/classes/truststore.jks
+ARG JKS_FILE=target/${WAR_ARTIFACTID}-${APP_VERSION}/WEB-INF/classes/truststore.jks
 ADD ${JKS_FILE} $DAYTRADER_TRUSTSTORE_LOCATION
 RUN chmod 666 $DAYTRADER_TRUSTSTORE_LOCATION
-# Add the application's war to the container
-ARG WAR_FILE=target/$DAYTRADER_WAR_ARTIFACTID-$DAYTRADER_APP_VERSION.war
-ADD ${WAR_FILE} app.war
+##  4.  Inform Docker that the container listens on the specified port
+EXPOSE ${EXPOSE_PORT}
+##
+##  Run the application in the container
+##
+##  1.  Setup the JAVA_OPTS for the application
 ENV JAVA_OPTS="-Djavax.net.ssl.trustStore=/var/ssl/daytrader/truststore.jks -Djavax.net.ssl.trustStorePassword=password"
+##  2.  Add the WAR to the container 
+ARG WAR_FILE=target/${WAR_ARTIFACTID}-${APP_VERSION}.war
+ADD ${WAR_FILE} app.war
+##  3.  Start the executable WAR
 ENTRYPOINT exec java $JAVA_OPTS -jar app.war
 ```
 
@@ -62,6 +88,7 @@ ENTRYPOINT exec java $JAVA_OPTS -jar app.war
 In `daytrader-portfoliosapp/daytrader-portfolios/pom.xml`, add the [Dockerfile Plugin](https://github.com/spotify/dockerfile-maven) and specify the DockerHub account. 
         
 ```xml
+<!--  Build the docker image and push it to docker hub -->
 <plugin>
     <groupId>com.spotify</groupId>
     <artifactId>dockerfile-maven-plugin</artifactId>
@@ -70,8 +97,8 @@ In `daytrader-portfoliosapp/daytrader-portfolios/pom.xml`, add the [Dockerfile P
         <execution>
             <phase>package</phase>
             <goals>
-                <goal>build</goal>    <!-- Builds the Docker image -->
-                <goal>push</goal>     <!-- Pushes the Docker image -->
+                <goal>build</goal>
+                <goal>push</goal>
             </goals>
         </execution>
     </executions>
@@ -79,9 +106,16 @@ In `daytrader-portfoliosapp/daytrader-portfolios/pom.xml`, add the [Dockerfile P
         <repository>${docker.image.prefix}/${project.artifactId}</repository>
         <tag>4.0.18</tag>
         <buildArgs>
-            <JAR_FILE>target/${project.artifactId}-${project.version}.war</JAR_FILE>
+            <WAR_ARTIFACTID>${project.artifactId}</WAR_ARTIFACTID>
+            <APP_VERSION>${project.parent.version}</APP_VERSION>
+            <APP_ARTIFACTID>${project.parent.artifactId}</APP_ARTIFACTID>
+            <EXPOSE_PORT>3443</EXPOSE_PORT>
+            <DATABASE_DRIVER>org.apache.derby.jdbc.EmbeddedDriver</DATABASE_DRIVER>
+            <DATABASE_URL>jdbc:derby:tradesdb;create=true</DATABASE_URL>
+            <DATABASE_USERNAME></DATABASE_USERNAME>
+            <DATABASE_PASSWORD></DATABASE_PASSWORD>
         </buildArgs>
-        <useMavenSettingsForAuth>true</useMavenSettingsForAuth>   <!-- Authenticates to your DockerHub account -->
+        <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
     </configuration>
 </plugin>
 ```
