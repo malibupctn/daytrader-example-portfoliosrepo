@@ -120,7 +120,7 @@ The Kubernetes Dashboard can be useful for managing and troubleshooting your clu
 
 ## Resources
 
-1.  [Azure Kubernetes Service] (https://azure.microsoft.com/services/container-service/)
+1.  [Azure Kubernetes Service](https://azure.microsoft.com/services/container-service/)
 
 2.  [NGINX Ingress Controller Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy/)
 
