@@ -80,7 +80,7 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
 
 2.  Create tha namespace; otherwise cloud-generic.yaml will have errors
         
-    a.  `$ cd daytrader-webapp/daytrader-web/env/external/k8s`
+    a.  `$ cd daytrader-webapp/daytrader-portfolios/env/external/kubernetes/conf`
             
     b.  `$ kubectl apply -f ingress-nginx-namespace.yaml`
     

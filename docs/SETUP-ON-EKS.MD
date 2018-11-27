@@ -53,7 +53,7 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
 
 1.  Create the namespace; otherwise cloud-generic.yaml will have errors
         
-    a.  `$ cd daytrader-webapp/daytrader-web/env/external/k8s`
+    a.  `$ cd daytrader-webapp/daytrader-portfolios/env/external/kubernetes/conf`
             
     b.  `$ kubectl apply -f ingress-nginx-namespace.yaml`
     
@@ -90,8 +90,12 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
 ### Install the Kubernetes Dashboard
 
 The Kubernetes Dashboard can be useful for managing and troubleshooting the cluster. To install it,
-                   
-1.  Get the token so you can authenticate with the Kubernetes Dashboard
+
+1.  Deploy the Kubernetes Dashboard to the cluster
+
+    `$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml`
+                       
+2.  Get the token so you can authenticate with the Kubernetes Dashboard
 
     a.  `$ kubectl -n kube-system get secrets | grep admin`
        
@@ -101,7 +105,7 @@ The Kubernetes Dashboard can be useful for managing and troubleshooting the clus
         
     Copy the value of the `authentication token`
                             
-2.  Start the proxy so you can authenticate with the Kubernetes API Server
+3.  Start the proxy so you can authenticate with the Kubernetes API Server
 
     `$ kubectl proxy`
     
@@ -111,11 +115,11 @@ The Kubernetes Dashboard can be useful for managing and troubleshooting the clus
 
     `$ kubectl proxy --port=8002`
 
-3.  Open the following link to access the Kubernetes Dashboard through the API Server
+4.  Open the following link to access the Kubernetes Dashboard through the API Server
         
     `http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/`
             
-4.  You will see a login screen; choose `Token` and then enter the value of the `authentication token` from Step 2. 
+5.  You will see a login screen; choose `Token` and then enter the value of the `authentication token` from Step 2. 
 
 ## Resources 
 
