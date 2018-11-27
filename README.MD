@@ -108,11 +108,11 @@ You can run the application on Spring Boot or on the Kubernetes Cluser.
 
 In this section we will take a look at how we migrated the Portfolios Spring Boot Application to Kubernetes. 
 
-1.  [Generate the Docker Image for our Application](docs/GENERATE-DOCKER-IMAGE.MD)
+1.  [Generate the Docker Image](docs/GENERATE-DOCKER-IMAGE.MD)
 
-2.  [Create the Kubernetes Deployment for our Docker Image](docs/CREATE-KUBERNETES-DEPLOYMENT.MD)
+2.  [Create the Kubernetes Deployment](docs/CREATE-KUBERNETES-DEPLOYMENT.MD)
 
-3.  [Create the Kubernetes Service for our Deployment](docs/CREATE-KUBERNETES-SERVICE.MD)
+3.  [Create the Kubernetes Service](docs/CREATE-KUBERNETES-SERVICE.MD)
 
 **Notes** 
 
