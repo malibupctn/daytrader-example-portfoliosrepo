@@ -113,6 +113,42 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
     `$ kubectl -n ingress-nginx logs nginx-ingress-controller-xxxxxxxxx-xxxxx`
                    
     You should see `successfully acquired lease ingress-nginx/ingress-controller-leader-nginx`
+
+### Install the Helm Server (Tiller)
+
+To install `tiller` into the gke cluster
+
+1.  `$ kubectl use-context CLUSTER_NAME`
+
+2.  `$ kubectl -n kube-system create serviceaccount tiller`
+
+    This command adds a service account within a namespace to segregate tiller 
+    
+3.  `$ kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller` 
+          
+    This command creates a cluster role binding for tiller
+            
+4.  `$ helm init --service-account tiller`
+    
+    This command initializes helm within the tiller service account
+    
+5.  `$ helm repo update`
+
+    This command updates the repos for Helm repo integration
+    
+    You should see `Successfully got an update from the "chartmuseum" chart repository`
+
+6.  `$ kubectl -n kube-system get deployments,services tiller-deploy`
+ 
+    This command verifies that helm in installed in the cluster
+    
+    NAME | DESIRED | CURRENT | UP-TO-DATE | AVAILABLE | AGE
+    ---- | ------- | ------- | ---------- | --------- | ---
+    deployment.extensions/tiller-deploy | 1 | 1 | 1 | 1| 39s
+
+    NAME | TYPE | CLUSTER-IP | EXTERNAL-IP | PORT(S) | AGE
+    ---- | ---- | ---------- | ----------- | ------- | --- 
+    service/tiller-deploy | ClusterIP | xx.xx.xx.xx | none | 12345/TCP | 39s
                             
 ### Install the Kubernetes Dashboard (N/A)
         

@@ -34,7 +34,9 @@ Gateway Microservice in turn redirects the request to the ([Accounts Microservic
 
 3.  [Install Docker](https://www.docker.com/get-docker)
     
-4.  [Create DockerHub Account](https://hub.docker.com/)
+4.  [Install Helm Client](https://github.com/helm/helm/blob/master/docs/install.md)
+    
+5.  [Create DockerHub Account](https://hub.docker.com/)
 
 
 
