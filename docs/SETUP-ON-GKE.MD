@@ -114,6 +114,7 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
                    
     You should see `successfully acquired lease ingress-nginx/ingress-controller-leader-nginx`
 
+
 ### Install the Helm Server (Tiller)
 
 To install `tiller` into the gke cluster
@@ -128,17 +129,11 @@ To install `tiller` into the gke cluster
 
     `$ kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller`
             
-4.  Initialize helm within the service account
+4.  Install helm within the cluster
 
     `$ helm init --service-account tiller`
     
-5.  Update the helm repo with the local repo
-
-    `$ helm repo update`
-    
-    You should see `Successfully got an update from the "chartmuseum" chart repository`
-
-6.  Verify that helm is installed in the cluster
+5.  Verify the installation
 
     `$ kubectl -n kube-system get deployments,services tiller-deploy`
     
@@ -149,6 +144,9 @@ To install `tiller` into the gke cluster
     NAME | TYPE | CLUSTER-IP | EXTERNAL-IP | PORT(S) | AGE
     ---- | ---- | ---------- | ----------- | ------- | --- 
     service/tiller-deploy | ClusterIP | xx.xx.xx.xx | none | 12345/TCP | 39s
+    
+**Notes:** in this installation, Tiller is deployed with an insecure `allow unauthenticted users` policy. This is completely appropriate for local development or for single tenant clusters within 
+a private network. To apply security configurations for multi-tenant clusters in uncontrolled environments, or for clusters with access to high valued data, see [Securing your Helm Installation](https://docs.helm.sh/using_helm/#securing-your-helm-installation)
                             
 ### Install the Kubernetes Dashboard (N/A)
         

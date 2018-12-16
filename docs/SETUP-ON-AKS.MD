@@ -102,6 +102,39 @@
                    
     You should see `successfully acquired lease ingress-nginx/ingress-controller-leader-nginx`
                     
+### Install the Helm Server (Tiller)
+
+To install `tiller` into the aks cluster
+
+1.  `$ kubectl use-context CLUSTER_NAME`
+
+2.  Create a service account for tiller
+
+    `$ kubectl -n kube-system create serviceaccount tiller`
+    
+3.  Create a cluster role binding for tiller
+
+    `$ kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller`
+            
+4.  Install helm within the cluster
+
+    `$ helm init --service-account tiller`
+    
+5.  Verify the installation
+
+    `$ kubectl -n kube-system get deployments,services tiller-deploy`
+    
+    NAME | DESIRED | CURRENT | UP-TO-DATE | AVAILABLE | AGE
+    ---- | ------- | ------- | ---------- | --------- | ---
+    deployment.extensions/tiller-deploy | 1 | 1 | 1 | 1| 39s
+   
+    NAME | TYPE | CLUSTER-IP | EXTERNAL-IP | PORT(S) | AGE
+    ---- | ---- | ---------- | ----------- | ------- | --- 
+    service/tiller-deploy | ClusterIP | xx.xx.xx.xx | none | 12345/TCP | 39s
+    
+**Notes:** in this installation, Tiller is deployed with an insecure `allow unauthenticted users` policy. This is completely appropriate for local development or for single tenant clusters within 
+a private network. To apply security configurations for multi-tenant clusters in uncontrolled environments, or for clusters with access to high valued data, see [Securing your Helm Installation](https://docs.helm.sh/using_helm/#securing-your-helm-installation)
+                    
 ### Install the Kubernetes Dashboard
 
 The Kubernetes Dashboard can be useful for managing and troubleshooting your cluster.
