@@ -51,11 +51,13 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
 
 ### Install the Ingres Controller
 
-1.  Create the namespace; otherwise cloud-generic.yaml will have errors
+1.  Create the namespace and confignap; otherwise cloud-generic.yaml will have errors
         
     a.  `$ cd daytrader-webapp/daytrader-portfolios/env/external/kubernetes/conf`
             
     b.  `$ kubectl apply -f ingress-nginx-namespace.yaml`
+        
+    c.  `$ kubectl apply -f ingress-nginx-configmap.yaml`
     
 2.  Deploy the NGINX Load Balancer
 
@@ -86,41 +88,46 @@ At this point you should have a cluster and `~/.kube/config` file created. That 
     `$ kubectl -n ingress-nginx logs nginx-ingress-controller-xxxxxxxxx-xxxxx`
                    
     You should see `successfully acquired lease ingress-nginx/ingress-controller-leader-nginx`
+    
+### Install the Helm Server (Tiller)
+
+To install `tiller` into the eks cluster
+
+1.  `$ kubectl use-context CLUSTER_NAME`
+
+2.  Create a service account for tiller
+
+    `$ kubectl -n kube-system create serviceaccount tiller`
+    
+3.  Create a cluster role binding for tiller
+
+    `$ kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller`
+            
+4.  Install helm within the cluster
+
+    `$ helm init --service-account tiller`
+    
+5.  Verify the installation
+
+    `$ kubectl -n kube-system get deployments,services tiller-deploy`
+    
+    NAME | DESIRED | CURRENT | UP-TO-DATE | AVAILABLE | AGE
+    ---- | ------- | ------- | ---------- | --------- | ---
+    deployment.extensions/tiller-deploy | 1 | 1 | 1 | 1| 39s
+   
+    NAME | TYPE | CLUSTER-IP | EXTERNAL-IP | PORT(S) | AGE
+    ---- | ---- | ---------- | ----------- | ------- | --- 
+    service/tiller-deploy | ClusterIP | xx.xx.xx.xx | none | xxxxx/TCP | 39s
+    
+**Notes:** in this installation, Tiller is deployed with an insecure `allow unauthenticted users` policy. This is completely appropriate for local development or for single tenant clusters within 
+a private network. To apply security configurations for multi-tenant clusters in uncontrolled environments, or for clusters with access to high valued data, see [Securing your Helm Installation](https://docs.helm.sh/using_helm/#securing-your-helm-installation)
                     
 ### Install the Kubernetes Dashboard
-
-The Kubernetes Dashboard can be useful for managing and troubleshooting the cluster. To install it,
-
-1.  Deploy the Kubernetes Dashboard to the cluster
-
-    `$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml`
-                       
-2.  Get the token so you can authenticate with the Kubernetes Dashboard
-
-    a.  `$ kubectl -n kube-system get secrets | grep admin`
-       
-    Record the NAME of the `admin-user-token`
-        
-    b.  `$ kubectl -n kube-system describe secrets ADMIN_USER_TOKEN`
-        
-    Copy the value of the `authentication token`
-                            
-3.  Start the proxy so you can authenticate with the Kubernetes API Server
-
-    `$ kubectl proxy`
     
-    You should see `Starting to serve on 127.0.0.1:8001`
-            
-    If you see a port binding error, start the proxy on a different port, e.g.
-
-    `$ kubectl proxy --port=8002`
-
-4.  Open the following link to access the Kubernetes Dashboard through the API Server
-        
-    `http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/`
-            
-5.  You will see a login screen; choose `Token` and then enter the value of the `authentication token` from Step 2. 
-
+The Kubernetes Dashboard can be useful for managing and troubleshooting the cluster. To install it, follow these instructions: [Tutorial: Deploy the Kubernetes Dashboard](https://docs.aws.amazon.com/eks/latest/userguide/dashboard-tutorial.html)
+​       
+**Notes:** If you get a port conflict when starting the proxy during the above instructions, use this command to specify a different port, e.g. `kubectl proxy --port=8002`
+    
 ## Resources 
 
 1.  [Amazon Elastic Container Service for Kubernetes](https://aws.amazon.com/eks/)

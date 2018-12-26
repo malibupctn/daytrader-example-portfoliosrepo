@@ -143,7 +143,7 @@ To install `tiller` into the gke cluster
    
     NAME | TYPE | CLUSTER-IP | EXTERNAL-IP | PORT(S) | AGE
     ---- | ---- | ---------- | ----------- | ------- | --- 
-    service/tiller-deploy | ClusterIP | xx.xx.xx.xx | none | 12345/TCP | 39s
+    service/tiller-deploy | ClusterIP | xx.xx.xx.xx | none | xxxxx/TCP | 39s
     
 **Notes:** in this installation, Tiller is deployed with an insecure `allow unauthenticted users` policy. This is completely appropriate for local development or for single tenant clusters within 
 a private network. To apply security configurations for multi-tenant clusters in uncontrolled environments, or for clusters with access to high valued data, see [Securing your Helm Installation](https://docs.helm.sh/using_helm/#securing-your-helm-installation)
