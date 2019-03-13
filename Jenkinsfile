@@ -25,7 +25,7 @@ pipeline {
         kanikoBuild('kaniko',
                     'daytrader-portfoliosapp',
                     'daytrader-portfolios',
-                    'baserepodev.devrepo.malibu-pctn.com/104017-malibu-artifacts',
+                    'baserepodev.devrepo.malibu-pctn.com/104017-malibu-artifacts/malibu-app-images/daytrader',
                     'daytrader-example-portfoliosapp',
                     'latest',
                     '4.0.0', 
